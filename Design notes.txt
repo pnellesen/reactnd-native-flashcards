@@ -1,0 +1,134 @@
+reactnd-flashcards notes
+====================
+
+AsyncStorage notes:
+    storage key:
+        DECKS_STORAGE_KEY = "reactnd_flashcards:decks"
+
+    getDecks() {
+        return AsyncStorage.getItem(DECKS_STORAGE_KEY)
+            .then(
+                //do something with the results - set our decks object, or just ?
+            )
+    }
+
+    getDeck(DECKS_STORAGE_KEY, title) {
+        AsyncStorage.getItem(DECKS_STORAGE_KEY)
+            .then (
+                const decks = JSON.parse(results)
+                return decks[title] || []
+            )
+    }
+
+    saveDeckTitle(DECKS_STORAGE_KEY, title) {
+        AsyncStorage.getItem(DECKS_STORAGE_KEY)
+            .then (
+                const decks = JSON.parse(results)
+                const newDecks = {
+                    ...decks,
+                    {[title]: {
+                        title: title,
+                        questions: []
+                    }}
+                }
+                AsyncStorage.setItem(DECKS_STORAGE_KEY,JSON.stringify(newDecks))
+                // Can we use AsyncStorage.merge instead?
+            )
+        // return anything?
+    }
+
+    addCardToDeck(DECKS_STORAGE_KEY, title, card) {
+        // card should be an array of question/answer objects [{question: 'blah', answer: 'bleh'},{question: 'blegh', answer: 'blergh'}]
+
+        AsyncStorage.getItem(DECKS_STORAGE_KEY)
+            .then(
+                const decks = JSON.parse(results)
+
+                const oldQuestions = decks[title].questions
+                const newQuestions = oldQuestions.concat(card)
+                const newDecks = {
+                    ...decks,
+                    decks[title]: {
+                        ...decks[title],
+                        questions: newQuestions // might not be the best way
+                    }
+                }
+                AsyncStorage.setItem(DECKS_STORAGE_KEY,JSON.stringify(newDecks))
+
+            )
+
+    }
+
+    saveAnswerResult?
+        Do we need an additional flag in the deck object for correct answer?
+        question:'blah',
+        answer:'bleh',
+        correct:null
+
+        We need to track this as the user moves through the quiz. We may want to persist it so the user can come back. Maybe make this a state variable and pass with props? Might be the only prop we'd need, so redux might be overkill...
+
+    getPercentCorrect?
+        returns the percentage of questions the user got correct
+
+    resetQuestions:
+        resets the correct flag for questions on a particular deck to null?
+
+
+
+
+
+
+Possible components:
+
+    Flashcard
+        2 sides: Front displays question, back displays answer
+
+    Deck - groups of flashcard. Can be created by user. User can add Flashcard to it.
+        (Methods: createDeck, addCard)
+
+    StatusBar - same as in UdaciFitness?
+
+
+    Tabs:
+        Decks (contains Deck list view)
+            screen: Decks
+            label: Deck List View
+            icon: something like a card deck or decks
+
+        New Deck
+            This is where user will create a new deck (contains New Deck View)
+            screen: NewDeckView
+            label: "Add New Deck"
+            icons: something like a single card deck
+
+
+    5 views:
+        Deck List View - Default
+            Title of deck
+            number of cards in each deck
+                Touchable - onPress takes user to Individual Deck view for that deck
+
+        Individual Deck View - user taken to this view when the select a Deck on the Deck List View
+            displays the title of the Deck
+            displays the number of cards in the deck
+            displays an option to start a quiz on this specific deck
+            An option to add a new question to the deck
+                onPress takes user to New Question View
+
+            Header links back to Deck List View
+
+        Quiz View
+            displays a card question
+            an option to view the answer (flips the card)
+                onPress does the flip animation
+            a "Correct" button
+            an "Incorrect" button
+            the number of cards left in the quiz
+            Displays the percentage correct once the quiz is complete
+
+
+        New Deck View
+
+        New Quesiton View
+
+
