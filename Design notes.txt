@@ -14,13 +14,22 @@ AsyncStorage notes:
 
     getDeck(DECKS_STORAGE_KEY, title) {
         AsyncStorage.getItem(DECKS_STORAGE_KEY)
-            .then (
+            .then((results) => {
                 const decks = JSON.parse(results)
                 return decks[title] || []
-            )
+            })
+
     }
 
     saveDeckTitle(DECKS_STORAGE_KEY, title) {
+
+        const newDeck = {
+            title: title,
+            questions: []
+        }
+        AsyncStorage.mergeItem(DECKS_STORAGE_KEY,JSON.stringify(newDeck))
+
+       // try mergeItem above first
         AsyncStorage.getItem(DECKS_STORAGE_KEY)
             .then (
                 const decks = JSON.parse(results)
@@ -32,30 +41,25 @@ AsyncStorage notes:
                     }}
                 }
                 AsyncStorage.setItem(DECKS_STORAGE_KEY,JSON.stringify(newDecks))
-                // Can we use AsyncStorage.merge instead?
             )
         // return anything?
     }
 
     addCardToDeck(DECKS_STORAGE_KEY, title, card) {
         // card should be an array of question/answer objects [{question: 'blah', answer: 'bleh'},{question: 'blegh', answer: 'blergh'}]
-
         AsyncStorage.getItem(DECKS_STORAGE_KEY)
-            .then(
+            .then((results) => {
                 const decks = JSON.parse(results)
-
                 const oldQuestions = decks[title].questions
                 const newQuestions = oldQuestions.concat(card)
-                const newDecks = {
-                    ...decks,
-                    decks[title]: {
-                        ...decks[title],
-                        questions: newQuestions // might not be the best way
+                const newDeck = {
+                    [title]: {
+                        title: title,
+                        questions: ...newQuestions
                     }
                 }
-                AsyncStorage.setItem(DECKS_STORAGE_KEY,JSON.stringify(newDecks))
-
-            )
+                AsyncStorage.mergeItem(DECKS_STORAGE_KEY,JSON.stringify(newDeck))
+            })
 
     }
 
