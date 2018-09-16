@@ -5,20 +5,29 @@ AsyncStorage notes:
     storage key:
         DECKS_STORAGE_KEY = "reactnd_flashcards:decks"
 
+
+    import dummyData from './utils/dummyData'
     getDecks() {
-        return AsyncStorage.getItem(DECKS_STORAGE_KEY)
-            .then(
-                //do something with the results - set our decks object, or just ?
-            )
+        AsyncStorage.getItem(DECKS_STORAGE_KEY)
+            .then((results) => {
+                return results !== null ? JSON.parse(results) : getDummyData()// remove when finished?
+            })
     }
 
     getDeck(DECKS_STORAGE_KEY, title) {
+
+        getDecks(DECKS_STORAGE_KEY)
+            .then((results)) {
+                return (results !== null && results[title]) ? results[title] : null
+            }
+
+        /*
         AsyncStorage.getItem(DECKS_STORAGE_KEY)
             .then((results) => {
                 const decks = JSON.parse(results)
-                return decks[title] || []
+                return decks[title] || null
             })
-
+        */
     }
 
     saveDeckTitle(DECKS_STORAGE_KEY, title) {
@@ -46,7 +55,7 @@ AsyncStorage notes:
     }
 
     addCardToDeck(DECKS_STORAGE_KEY, title, card) {
-        // card should be an array of question/answer objects [{question: 'blah', answer: 'bleh'},{question: 'blegh', answer: 'blergh'}]
+        // card should be an array of question/answer objects [{question: 'blah', answer: 'bleh', correct: null},{question: 'blegh', answer: 'blergh', correct: null}]
         AsyncStorage.getItem(DECKS_STORAGE_KEY)
             .then((results) => {
                 const decks = JSON.parse(results)
@@ -69,13 +78,68 @@ AsyncStorage notes:
         answer:'bleh',
         correct:null
 
-        We need to track this as the user moves through the quiz. We may want to persist it so the user can come back. Maybe make this a state variable and pass with props? Might be the only prop we'd need, so redux might be overkill...
+        recordAnswer(DECKS_STORAGE_KEY, title, questionIndex, isCorrect) {
+            getDeck(DECKS_STORAGE_KEY,title)
+                .then((result) => {
+                    /*
+                    result should look like:
+                    [title] : {
+                        title: title,
+                        questions: [
+                            {
+                                question: 'question',
+                                answer: 'answer',
+                                correct: null
+                            }
+                        ]
+                    }
+                    */
+                    const newDeck = {
+                        ...result,
+                        questions:[
+                            ...questions,
+                            questions[questionIndex]: {
+                                ...questions[questionIndex],
+                                correct: isCorrect
+                            }
+                        ]
+                    }
+                    AsyncStorage.mergeItem(DECKS_STORAGE_KEY,JSON.stringify(newDeck))
+                })
+        }
+
+        We need to track this as the user moves through the quiz. We may want to persist it so the user can come back.
+        Will persist this in AsyncStorage to  determine if user has answered a question for that day.
+
 
     getPercentCorrect?
-        returns the percentage of questions the user got correct
+        returns the percentage of questions the user got correct in a particular deck
+        const thisDeck = getDeck(DECKS_STORAGE_KEY, title)
+        const totalQuestions = thisDeck.questions.length
+        const questionsCorrect = thisDeck.questions.filter((question) => {
+                questions[question].correct === true
+            }).length
+        return Math.floor(questionsCorrect/totalQuestions * 100)
+
+
+
+
 
     resetQuestions:
         resets the correct flag for questions on a particular deck to null?
+
+--------------------------------------------------------------------------
+
+Notifications notes:
+
+    Need a daily notification to remind user to answer at least one quiz
+
+    const questionsAnswered = getDecks(DECKS_STORAGE_KEY).Object(keys).map((deck) => {
+        return deck[questions].filter((question) => {
+            question.correct !== null
+        })
+    })
+    if questionsAnswered.length > 0 at least one question was answered
 
 
 

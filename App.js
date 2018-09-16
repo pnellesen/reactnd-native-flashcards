@@ -3,7 +3,8 @@ import { StyleSheet, Text, View, StatusBar } from 'react-native';
 import { createBottomTabNavigator, createStackNavigator } from 'react-navigation'
 import Decks from './components/Decks'
 import NewDeckView from './components/NewDeckView'
-import { Constants } from 'expo'
+import { Constants, AppLoading } from 'expo'
+import { getDecks } from './utils/helpers'
 
 function DecksStatusBar({ backgroundColor, ...props}) {
   return (
@@ -50,13 +51,40 @@ const Tabs = createBottomTabNavigator({
   }
 })
 
+
+
+
 export default class App extends React.Component {
+  state = {
+    isReady: false,
+    deckList: null
+
+  }
+  componentDidMount() {
+    // We may want to do this in Decks component instead
+
+    getDecks()
+      .then((results) => {
+        console.log("component didMount - results? ", results)
+        this.setState({
+          deckList: results,
+          isReady: true
+        })
+      })
+  }
 
   render() {
+    const { isReady, deckList } = this.state
+
+    if (isReady === false) {
+      return <AppLoading/>
+    }
+
     return (
       <View style={styles.container}>
         <DecksStatusBar backgroundColor={'#ccc'}/>
-        <Tabs/>
+        <Text>Deck list: {JSON.stringify(deckList)}</Text>
+        <Tabs deckList={deckList}/>
       </View>
 
     );

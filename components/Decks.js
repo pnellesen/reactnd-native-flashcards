@@ -7,6 +7,7 @@ class Decks extends Component {
         return (
             <View>
                 <Text style={{color:'#000'}}>Deck List View here</Text>
+                <Text>Props? {JSON.stringify(this.props)}</Text>
             </View>
         )
     }
