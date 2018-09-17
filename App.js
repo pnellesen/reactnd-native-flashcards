@@ -2,6 +2,8 @@ import React from 'react';
 import { StyleSheet, Text, View, StatusBar } from 'react-native';
 import { createBottomTabNavigator, createStackNavigator } from 'react-navigation'
 import Decks from './components/Decks'
+import Deck from './components/Deck'
+import { white, purple }from './utils/colors'
 import NewDeckView from './components/NewDeckView'
 import { Constants, AppLoading } from 'expo'
 import { getDecks } from './utils/helpers'
@@ -14,9 +16,14 @@ function DecksStatusBar({ backgroundColor, ...props}) {
   )
 }
 
+/**
+ * TODO: create a StackNavigator to go through the questions in a Deck,
+ * use the navigate in Decks.js to go to the deck the user selects.
+ */
+
 const Tabs = createBottomTabNavigator({
   Decks: {
-    screen:Decks,
+    screen: props => <Decks {...props} />,
     navigationOptions:{
       tabBarLabel: 'Deck List View'
     }
@@ -51,7 +58,20 @@ const Tabs = createBottomTabNavigator({
   }
 })
 
-
+const MainNavigator = createStackNavigator({
+  Home: {
+    screen: Tabs,
+  },
+  Deck: {
+    screen: Deck,
+    navigationOptions: {
+      headerTintColor: white,
+      headerStyle: {
+        backgroundColor: purple,
+      }
+    }
+  }
+})
 
 
 export default class App extends React.Component {
@@ -83,8 +103,7 @@ export default class App extends React.Component {
     return (
       <View style={styles.container}>
         <DecksStatusBar backgroundColor={'#ccc'}/>
-        <Text>Deck list: {JSON.stringify(deckList)}</Text>
-        <Tabs deckList={deckList}/>
+        <MainNavigator screenProps={{ deckList: deckList }}/>
       </View>
 
     );
