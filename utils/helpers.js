@@ -16,3 +16,13 @@ export function getDecks() {
             return results !== null ? JSON.parse(results) : dummyData// remove when finished?
         })
 }
+
+export function getDeck(key) {
+
+    return AsyncStorage.getItem(DECKS_STORAGE_KEY)
+    .then((results) => {
+        //console.log("getDecks? " , results, " - dummyData? ", dummyData)
+        return results !== null ? JSON.parse(results)[key] : dummyData[key]// remove when finished?
+    })
+
+}

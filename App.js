@@ -5,6 +5,7 @@ import Decks from './components/Decks'
 import Deck from './components/Deck'
 import { white, purple }from './utils/colors'
 import NewDeckView from './components/NewDeckView'
+import QuizView from './components/QuizView'
 import { Constants, AppLoading } from 'expo'
 import { getDecks } from './utils/helpers'
 
@@ -64,6 +65,15 @@ const MainNavigator = createStackNavigator({
   },
   Deck: {
     screen: Deck,
+    navigationOptions: {
+      headerTintColor: white,
+      headerStyle: {
+        backgroundColor: purple,
+      }
+    }
+  },
+  QuizView: {
+    screen: QuizView,
     navigationOptions: {
       headerTintColor: white,
       headerStyle: {
