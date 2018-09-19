@@ -5,12 +5,14 @@ export default dummyData = {
         {
           question: 'What is React?',
           answer: 'A library for managing user interfaces',
-          correct: null
+          correct: null,
+          showAnswer: false
         },
         {
           question: 'Where do you make Ajax requests in React?',
           answer: 'The componentDidMount lifecycle event',
-          correct: null
+          correct: null,
+          showAnswer: false
         }
       ]
     },
@@ -20,7 +22,8 @@ export default dummyData = {
         {
           question: 'What is a closure?',
           answer: 'The combination of a function and the lexical environment within which that function was declared.',
-          correct: null
+          correct: null,
+          showAnswer: false
         }
       ]
     }

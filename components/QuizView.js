@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Text, View, StyleSheet, TouchableOpacity } from 'react-native';
 import { getDeck } from '../utils/helpers'
 import { Constants, AppLoading } from 'expo'
+import dummyData from '../utils/dummyData';
 
 class QuizView extends Component {
     static navigationOptions = ({ navigation}) => {
@@ -12,14 +13,17 @@ class QuizView extends Component {
         }
         */
     }
-    state = {
-        numberCorrect: null,
-        numberAnswered: null,
-        totalQuestions: null,
-        questionIndex: null,
-        deck: {},
-        isReady: false
+    _getInitialState = () => {
+        return {
+            numberCorrect: null,
+            numberAnswered: null,
+            totalQuestions: null,
+            questionIndex: null,
+            deck: {},
+            isReady: false
+        }
     }
+    state = this._getInitialState()
 
 
     /**
@@ -27,9 +31,13 @@ class QuizView extends Component {
      * set questionIndex to index of first unanaswered
      */
     componentDidMount() {
+        this._setStateFromDeck()
+    }
+
+    _setStateFromDeck = () => {
         const {key} = this.props.navigation.state.params
         getDeck(key).then((result) => {
-
+            console.log("quiz info pulled from AsyncStorage: ", result)
             this.setState({
                 isReady: true,
                 deck: result,
@@ -41,54 +49,105 @@ class QuizView extends Component {
                     return question.correct !== null
                 }).length
             }, () => {
-                console.log('quiz view mounted - state? ', this.state)
+                console.log('quiz info retrieved - state? ', this.state)
             })
 
         })
     }
 
+    _restartQuiz = () => {
 
+        this._setStateFromDeck()
 
-    _answerQuestion = (isCorrect, idx) => {
-        // set correct for questions[idx] = isCorrect
-        // get index of next unanswered question
-        // this.setState({questionIndex: unansweredIndex})
+        /*
+        const { deck } = this.state
+        deck.questions.map((question, idx) => {
+            deck.questions[idx].correct = null
+            deck.questions[idx].showAnswer = false
+        })
+        this.setState({
+            deck: deck,
+            numberCorrect: deck.questions.filter((question) => {
+                return question.correct === true
+            }).length,
+            numberAnswered: deck.questions.filter((question) => {
+                return question.correct !== null
+            }).length
+        }, () => {
+            console.log("Question answered - new state? ", this.state)
+        })
+        */
+
     }
 
+    _toggleShowAnswer = (idx) => {
+        const { deck } = this.state
+        deck.questions[idx].showAnswer = !deck.questions[idx].showAnswer;
+        this.setState({
+            deck: deck
+        })
+    }
+
+    _answerQuestion = (isCorrect, idx) => {
+
+        const { deck } = this.state
+        deck.questions[idx].correct = isCorrect;
+        this.setState({
+            deck: deck,
+            numberCorrect: deck.questions.filter((question) => {
+                return question.correct === true
+            }).length,
+            numberAnswered: deck.questions.filter((question) => {
+                return question.correct !== null
+            }).length
+        }, () => {
+            console.log("Question answered - new state? ", this.state)
+        })
+
+    }
 
     render() {
+        const { navigation } = this.props
         const { isReady, deck, numberAnswered, numberCorrect, totalQuestions } = this.state
+        const { key } = this.props.navigation.state.params
+
         if (isReady === false) {
             return <AppLoading/>
         }
-        const { navigation } = this.props
-        const { key } = navigation.state.params
-        //const { deckList } = this.props.screenProps
-
 
         // TODO: error handling if we don't get a valid dec
 
-
-        // TODO: filter on deck.questions to display the nth unanswered one?
-        // "When the score is displayed, buttons are displayed to either start the quiz over or go back to the Individual Deck view"
-
         if (numberAnswered < deck.questions.length) {
+            const { showAnswer, question, answer } = deck.questions[numberAnswered]
+
             return(
                 <View>
                     <Text>{numberAnswered + 1}/{totalQuestions}</Text>
                     <Text>Quiz View for {deck.title} Here</Text>
-                    <Text style={{margin: 10, fontSize:30}}>{deck.questions[numberAnswered].question}</Text>
-                    <Text>[show answer button here]</Text>
-                    <Text>[Correct button here]</Text>
-                    <Text>[Incorrect button here]</Text>
+                    <Text style={{margin: 10, fontSize:30}}>{question}</Text>
+                    {showAnswer &&
+                        <Text style={{margin: 10, fontSize:16}}>{answer}</Text>
+                    }
+                     <TouchableOpacity style={{backgroundColor: '#fff', margin:10, padding: 10,borderRadius: 5, borderWidth:1, borderColor:'#000'}}
+                                onPress={() => this._toggleShowAnswer(numberAnswered)}><Text>{showAnswer ? `Hide` : `Show`} Answer</Text></TouchableOpacity>
+
+                    <TouchableOpacity style={{backgroundColor: '#fff', margin:10, padding: 10,borderRadius: 5, borderWidth:1, borderColor:'#000'}}
+                                onPress={() => this._answerQuestion(true, numberAnswered)}><Text>Correct</Text></TouchableOpacity>
+                    <TouchableOpacity style={{backgroundColor: '#fff', margin:10, padding: 10,borderRadius: 5, borderWidth:1, borderColor:'#000'}}
+                                onPress={() => this._answerQuestion(false, numberAnswered)}><Text>Incorrect</Text></TouchableOpacity>
                 </View>
             )
         } else {
             return (
                 <View>
                     <Text>All questions answered! Number correct/Total: {numberCorrect}/{totalQuestions}</Text>
-                    <Text>[reset quiz button here - sets everything for this deck to null]</Text>
-                    <Text>[Go back to Deck List View]</Text>
+                    <TouchableOpacity style={{backgroundColor: '#fff', margin:10, padding: 10,borderRadius: 5, borderWidth:1, borderColor:'#000'}}
+                                onPress={() => this._restartQuiz()}><Text>Restart Quiz</Text></TouchableOpacity>
+                    <TouchableOpacity style={{backgroundColor: '#000', margin:10, padding: 10,borderRadius: 5, borderWidth:1, borderColor:'#000'}}
+                                onPress={() => navigation.navigate(
+                                    'Deck',
+                                    { key: key}
+                                )}><Text style={{color: '#fff'}}>Back to Deck</Text></TouchableOpacity>
                 </View>
             )
         }
