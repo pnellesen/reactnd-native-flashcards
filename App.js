@@ -6,8 +6,7 @@ import Deck from './components/Deck'
 import { white, purple }from './utils/colors'
 import NewDeckView from './components/NewDeckView'
 import QuizView from './components/QuizView'
-import { Constants, AppLoading } from 'expo'
-import { getDecks } from './utils/helpers'
+import { Constants } from 'expo'
 
 function DecksStatusBar({ backgroundColor, ...props}) {
   return (
@@ -24,7 +23,7 @@ function DecksStatusBar({ backgroundColor, ...props}) {
 
 const Tabs = createBottomTabNavigator({
   Decks: {
-    screen: props => <Decks {...props} />,
+    screen: Decks,
     navigationOptions:{
       tabBarLabel: 'Deck List View'
     }
@@ -85,35 +84,14 @@ const MainNavigator = createStackNavigator({
 
 
 export default class App extends React.Component {
-  state = {
-    isReady: false,
-    deckList: null
 
-  }
-  componentDidMount() {
-    // We may want to do this in Decks component instead
-
-    getDecks()
-      .then((results) => {
-        console.log("component didMount - results? ", results)
-        this.setState({
-          deckList: results,
-          isReady: true
-        })
-      })
-  }
 
   render() {
-    const { isReady, deckList } = this.state
-
-    if (isReady === false) {
-      return <AppLoading/>
-    }
 
     return (
       <View style={styles.container}>
         <DecksStatusBar backgroundColor={'#ccc'}/>
-        <MainNavigator screenProps={{ deckList: deckList }}/>
+        <MainNavigator/>
       </View>
 
     );

@@ -8,23 +8,47 @@ const NOTIFICATION_KEY = 'reactnd_flashcards:notifications'
 const DECKS_STORAGE_KEY = "reactnd_flashcards:decks"
 
 export function getDecks() {
-    return AsyncStorage.getItem(DECKS_STORAGE_KEY)
-        .then((results) => {
 
-            console.log("getDecks? " , results)
-            return results !== null ? JSON.parse(results) : this._getDummyData()
-        })
+  const cleanUp = false
+
+  if (cleanUp === false ) {
+    return AsyncStorage.getItem(DECKS_STORAGE_KEY)
+    .then((results) => {
+      return results !== null ? JSON.parse(results) : this._getDummyData()
+    })
+  }
+
+  //Use this if we need to clean up asyncStorage
+  return AsyncStorage.removeItem(DECKS_STORAGE_KEY)
+    .then(() => {
+      return this._getDummyData()
+  })
 }
 
 export function getDeck(key) {
 
     return AsyncStorage.getItem(DECKS_STORAGE_KEY)
     .then((results) => {
-        console.log("getDeck - results? ", results)
         return results !== null ? JSON.parse(results)[key] : this._getDummyData()[key]
     })
 
 }
+
+export function addDeck(title) {
+  const newDeck = {
+    [title]: {
+      title: title,
+      questions: []
+    }
+  }
+  //console.log("add new deck - newDeck? ", newDeck)
+
+  return AsyncStorage.mergeItem(DECKS_STORAGE_KEY,JSON.stringify(newDeck))
+    .then((results) => {
+      console.log("new deck added - results? ", results)
+    })
+}
+
 
 _getDummyData = () => {
     const dummyData = {

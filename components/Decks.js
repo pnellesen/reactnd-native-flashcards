@@ -1,18 +1,47 @@
 import React, { Component } from 'react'
 import { View, Text, TouchableOpacity, Platform, StyleSheet } from 'react-native'
-
-_onPress = (key, navigation) => {
-    console.log("Get deck for: ", key)
-
-    //This will take us to the Deck component
-}
+import { getDecks } from '../utils/helpers'
 
 class Decks extends Component {
+    state = {
+        deckList: {},
+        isReady: false
+    }
+
+    //Need to reload from asyncStorage when DeckList is focused (in order to see new Decks if they've been added)
+    //https://stackoverflow.com/questions/50290818/react-navigation-detect-when-screen-is-activated-appear-focus-blur
+
+    componentDidMount() {
+        this.subs = [
+            this.props.navigation.addListener('didFocus', () => this._getDecks()),
+        ];
+        console.log("Decks mounted")
+    }
+
+    componentWillUnmount() {
+        this.subs.forEach(sub => sub.remove());
+        console.log("Decks unmounted")
+    }
+
+    _getDecks() {
+        console.log("Decks: Loading decks from asyncStorage")
+        getDecks().then((results) => {
+            this.setState({
+                deckList: results,
+                isReady: true
+            })
+        })
+    }
+
     render() {
-        //console.log("props? ", this.props)
-        const { deckList } = this.props.screenProps
+        const { isReady, deckList } = this.state
         const { navigation } = this.props
-        console.log("Navigate? ", navigation)
+
+        if (isReady === false) return (<Text>Please wait...</Text>)
+
+        /** TODO
+         * Use a ListView instead of view for when the number of decks gets large
+         */
         return (
             <View>
                 <Text style={{color:'#000'}}>Deck List View here</Text>
