@@ -8,7 +8,7 @@ const NOTIFICATION_KEY = 'reactnd_flashcards:notifications'
 const DECKS_STORAGE_KEY = "reactnd_flashcards:decks"
 
 export function addCard(deck) {
-  getDeck(deck.title)
+ return getDeck(deck.title)
     .then((result) => {
       const newDeck = {
         [deck.title]: {

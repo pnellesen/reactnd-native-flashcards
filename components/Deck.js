@@ -21,21 +21,30 @@ class Deck extends Component {
     }
     componentDidMount() {
 
-        this.subs = [
-            this.props.navigation.addListener('didFocus', () => this._getDeck()),
-        ];
+       console.log("Deck mounted")
+       this._getDeck()
     }
     componentWillUnmount() {
-        this.subs.forEach(sub => sub.remove());
+        //this.subs.forEach(sub => sub.remove());
+    }
+
+    componentDidUpdate(prevProps, prevState) {
+        console.log("Deck: props changed? ", this.props !== prevProps)
+        this._getDeck()
     }
     _getDeck() {
         const { key } = this.props.navigation.state.params
+        const { deck } = this.state
         getDecks().then((results) => {
-            const deck = results[key]
-            this.setState({
-                deck: deck,
-                isReady: true
-            })
+            const newDeck = results[key]
+            console.log("_getDeck(): new deck = deck? ", deck === newDeck)
+            if (deck === null || (deck.questions.length != newDeck.questions.length)) {
+                this.setState({
+                    deck: newDeck,
+                    isReady: true
+                })
+            }
+
         })
     }
 

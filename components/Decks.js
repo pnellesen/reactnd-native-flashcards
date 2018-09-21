@@ -1,12 +1,14 @@
 import React, { Component } from 'react'
 import { View, Text, TouchableOpacity, Platform, StyleSheet } from 'react-native'
+import { withNavigationFocus } from 'react-navigation';
 import { getDecks } from '../utils/helpers'
 import { Constants, AppLoading } from 'expo'
 
 class Decks extends Component {
     state = {
         deckList: {},
-        isReady: false
+        isReady: false,
+        hasMounted: false
     }
 
     //Need to reload from asyncStorage when DeckList is focused (in order to see new Decks if they've been added)
@@ -14,18 +16,25 @@ class Decks extends Component {
 
     componentDidMount() {
 
+        /*
         this.subs = [
             this.props.navigation.addListener('didFocus', () => this._getDecks()),
         ];
-
-       //this._getDecks()
+        */
+        this._getDecks()
+        console.log("Decks mounted")
+    }
+    componentDidUpdate(prevProps) {
+        if (this.props.isFocused && (this.props.isFocused !== prevProps.isFocused)) this._getDecks()
     }
 
     componentWillUnmount() {
-        this.subs.forEach(sub => sub.remove());
+        //this.subs.forEach(sub => sub.remove());
+        console.log("Decks unmounted")
     }
 
     _getDecks() {
+        console.log("Get decks")
         getDecks().then((results) => {
             this.setState({
                 deckList: results,
@@ -67,4 +76,4 @@ class Decks extends Component {
     }
 }
 
-export default Decks
+export default withNavigationFocus(Decks)

@@ -48,9 +48,11 @@ class NewCardView extends Component {
             questions: newQuestions
         }
 
-        addCard(newDeck)
+        addCard(newDeck).then(()=> {
+            navigation.navigate('Deck', {key: deck.title})
+        })
 
-        navigation.navigate('Deck', {key: deck.title})
+
 
     }
 
