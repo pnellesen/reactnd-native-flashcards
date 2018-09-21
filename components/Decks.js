@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { View, Text, TouchableOpacity, Platform, StyleSheet } from 'react-native'
 import { getDecks } from '../utils/helpers'
+import { Constants, AppLoading } from 'expo'
 
 class Decks extends Component {
     state = {
@@ -12,19 +13,19 @@ class Decks extends Component {
     //https://stackoverflow.com/questions/50290818/react-navigation-detect-when-screen-is-activated-appear-focus-blur
 
     componentDidMount() {
+
         this.subs = [
             this.props.navigation.addListener('didFocus', () => this._getDecks()),
         ];
-        console.log("Decks mounted")
+
+       //this._getDecks()
     }
 
     componentWillUnmount() {
         this.subs.forEach(sub => sub.remove());
-        console.log("Decks unmounted")
     }
 
     _getDecks() {
-        console.log("Decks: Loading decks from asyncStorage")
         getDecks().then((results) => {
             this.setState({
                 deckList: results,
@@ -37,7 +38,7 @@ class Decks extends Component {
         const { isReady, deckList } = this.state
         const { navigation } = this.props
 
-        if (isReady === false) return (<Text>Please wait...</Text>)
+        if (isReady === false) return (<AppLoading/>)
 
         /** TODO
          * Use a ListView instead of view for when the number of decks gets large

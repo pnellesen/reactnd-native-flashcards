@@ -37,7 +37,6 @@ class QuizView extends Component {
     _setStateFromDeck = () => {
         const {key} = this.props.navigation.state.params
         getDeck(key).then((result) => {
-            console.log("quiz info pulled from AsyncStorage: ", result)
             this.setState({
                 isReady: true,
                 deck: result,
@@ -48,10 +47,7 @@ class QuizView extends Component {
                 numberAnswered: result.questions.filter((question) => {
                     return question.correct !== null
                 }).length
-            }, () => {
-                console.log('quiz info retrieved - state? ', this.state)
             })
-
         })
     }
 
@@ -100,8 +96,6 @@ class QuizView extends Component {
             numberAnswered: deck.questions.filter((question) => {
                 return question.correct !== null
             }).length
-        }, () => {
-            console.log("Question answered - new state? ", this.state)
         })
 
     }

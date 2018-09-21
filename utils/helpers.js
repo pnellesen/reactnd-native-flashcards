@@ -7,6 +7,21 @@ import { Notifications, Permissions } from 'expo'
 const NOTIFICATION_KEY = 'reactnd_flashcards:notifications'
 const DECKS_STORAGE_KEY = "reactnd_flashcards:decks"
 
+export function addCard(deck) {
+  getDeck(deck.title)
+    .then((result) => {
+      const newDeck = {
+        [deck.title]: {
+          ...result,
+          ...deck
+        }
+      }
+      return AsyncStorage.mergeItem(DECKS_STORAGE_KEY,JSON.stringify(newDeck))
+    })
+
+}
+
+
 export function getDecks() {
 
   const cleanUp = false
@@ -29,7 +44,8 @@ export function getDeck(key) {
 
     return AsyncStorage.getItem(DECKS_STORAGE_KEY)
     .then((results) => {
-        return results !== null ? JSON.parse(results)[key] : this._getDummyData()[key]
+        const resObj = results !== null ? JSON.parse(results) : this._getDummyData()
+        return resObj[key]
     })
 
 }
@@ -44,9 +60,6 @@ export function addDeck(title) {
   //console.log("add new deck - newDeck? ", newDeck)
 
   return AsyncStorage.mergeItem(DECKS_STORAGE_KEY,JSON.stringify(newDeck))
-    .then((results) => {
-      console.log("new deck added - results? ", results)
-    })
 }
 
 

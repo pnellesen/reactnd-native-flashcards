@@ -6,6 +6,7 @@ import Deck from './components/Deck'
 import { white, purple }from './utils/colors'
 import NewDeckView from './components/NewDeckView'
 import QuizView from './components/QuizView'
+import NewCardView from './components/NewCardView'
 import { Constants } from 'expo'
 
 function DecksStatusBar({ backgroundColor, ...props}) {
@@ -73,6 +74,15 @@ const MainNavigator = createStackNavigator({
   },
   QuizView: {
     screen: QuizView,
+    navigationOptions: {
+      headerTintColor: white,
+      headerStyle: {
+        backgroundColor: purple,
+      }
+    }
+  },
+  AddQuestion: {
+    screen:NewCardView,
     navigationOptions: {
       headerTintColor: white,
       headerStyle: {
