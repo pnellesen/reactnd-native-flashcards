@@ -9,7 +9,6 @@ class NewDeckView extends Component {
 
     }
     componentDidMount() {
-        console.log("NewDeckView mounted")
         getDecks()
             .then((result) => {
                 this.setState({
@@ -31,6 +30,7 @@ class NewDeckView extends Component {
         this.setState({
             newDeckTitle: ''
         })
+        if (this.props.screenProps.reloadDecks === false) this.props.screenProps.setReloadDecks(true)
         navigation.navigate('Deck', {key: newTitle})
     }
 

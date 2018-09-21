@@ -94,14 +94,20 @@ const MainNavigator = createStackNavigator({
 
 
 export default class App extends React.Component {
+  state={
+    reloadDecks: false
+  }
 
+  _setReloadDecks = (value) => {
+    this.setState({reloadDecks: value})
+  }
 
   render() {
 
     return (
       <View style={styles.container}>
         <DecksStatusBar backgroundColor={'#ccc'}/>
-        <MainNavigator/>
+        <MainNavigator screenProps={{setReloadDecks: this._setReloadDecks, reloadDecks: this.state.reloadDecks}}/>
       </View>
 
     );

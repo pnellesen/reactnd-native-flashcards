@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { View, Text, TextInput, KeyboardAvoidingView, TouchableOpacity, Platform, StyleSheet } from 'react-native'
-import { getDeck, addDeck, addCard } from '../utils/helpers'
+import { getDeck, addCard } from '../utils/helpers'
 
 class NewCardView extends Component {
     state = {
@@ -36,7 +36,6 @@ class NewCardView extends Component {
         const { navigation } = this.props
         const { deck, newCardQuestion, newCardAnswer } = this.state
 
-        //addDeck(newTitle)
         const newQuestions = deck.questions.concat({
             question: newCardQuestion,
             answer: newCardAnswer,
@@ -49,6 +48,7 @@ class NewCardView extends Component {
         }
 
         addCard(newDeck).then(()=> {
+            if (this.props.screenProps.reloadDecks === false) this.props.screenProps.setReloadDecks(true)
             navigation.navigate('Deck', {key: deck.title})
         })
 
