@@ -7,6 +7,12 @@ import { Notifications, Permissions } from 'expo'
 const NOTIFICATION_KEY = 'reactnd_flashcards:notifications'
 const DECKS_STORAGE_KEY = "reactnd_flashcards:decks"
 
+/**
+ * TODO: add a helper function to generate a UID. copy from one used previously
+ * if you can find it.
+ */
+
+
 export function addCard(deck) {
  return getDeck(deck.title)
     .then((result) => {

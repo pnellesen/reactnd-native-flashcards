@@ -1,35 +1,30 @@
 import React, { Component } from 'react'
-import { View, Text, TouchableOpacity, Platform, StyleSheet } from 'react-native'
+import { View, Text, TouchableOpacity, Platform, StyleSheet, ScrollView } from 'react-native'
 import { getDecks } from '../utils/helpers'
 import { Constants, AppLoading } from 'expo'
 
 class Decks extends Component {
     state = {
         deckList: {},
-        isReady: false,
-        reloadDecks: false
+        isReady: false
     }
 
-    componentDidMount() {
+    _getDecks = () => {
         getDecks().then((results) => {
             this.setState({
                 deckList: results,
                 isReady: true
             })
+            this.props.screenProps.setReloadDecks(false)
         })
     }
 
-    componentDidUpdate() {
-        if (this.state.reloadDecks || this.props.screenProps.reloadDecks) {
-            getDecks().then((results) => {
-                this.setState({
-                    deckList: results,
-                    isReady: true,
-                    reloadDecks: false
-                })
-                this.props.screenProps.setReloadDecks(false)
-            })
-        }
+    componentDidMount() {
+        this._getDecks()
+    }
+
+    componentWillReceiveProps(nextProps) {
+        nextProps.screenProps.reloadDecks && this._getDecks()
     }
 
     render() {
@@ -38,12 +33,18 @@ class Decks extends Component {
 
         if (isReady === false) return (<AppLoading/>)
 
-        /** TODO
-         * Use a ListView instead of view for when the number of decks gets large
+        /**
+         * Using ScrollView for simplicity. Would probably
+         * use FlatList if it was anticipated that list would be long
          */
         return (
             <View>
                 <Text style={{color:'#000'}}>Deck List View here</Text>
+                <ScrollView
+                    contentContainerStyle={{
+                    flexGrow: 1,
+                    justifyContent: 'space-between'
+                }}>
                 {
                     Object.keys(deckList).map((key) => {
                         return (
@@ -60,6 +61,7 @@ class Decks extends Component {
 
                     })
                 }
+                </ScrollView>
             </View>
         )
     }

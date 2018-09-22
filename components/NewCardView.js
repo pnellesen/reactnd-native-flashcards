@@ -37,7 +37,7 @@ class NewCardView extends Component {
         const { deck, newCardQuestion, newCardAnswer } = this.state
 
         const newQuestions = deck.questions.concat({
-            question: newCardQuestion,
+            question: newCardQuestion.slice(-1) ==='?' ? newCardQuestion : newCardQuestion + '?',
             answer: newCardAnswer,
             correct: null,
             showAnswer: false
