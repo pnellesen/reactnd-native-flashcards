@@ -1,19 +1,25 @@
 import React, { Component } from 'react'
 import { View, Text, TouchableOpacity, Platform, StyleSheet, ScrollView } from 'react-native'
-import { getDecks } from '../utils/helpers'
+import { getDecks, timeToString, getDailyReminderValue  } from '../utils/helpers'
+import { red } from '../utils/colors'
 import { Constants, AppLoading } from 'expo'
 
 class Decks extends Component {
     state = {
         deckList: {},
-        isReady: false
+        isReady: false,
+        showDailyReminder: false
     }
 
     _getDecks = () => {
         getDecks().then((results) => {
+            const showReminder = (Object.keys(results).filter((result) => {
+                return results[result].lastCompletedDate === timeToString()
+            }).length === 0)
             this.setState({
                 deckList: results,
-                isReady: true
+                isReady: true,
+                showDailyReminder:showReminder
             })
             this.props.screenProps.setReloadDecks(false)
         })
@@ -28,7 +34,7 @@ class Decks extends Component {
     }
 
     render() {
-        const { isReady, deckList } = this.state
+        const { isReady, deckList, showDailyReminder } = this.state
         const { navigation } = this.props
 
         if (isReady === false) return (<AppLoading/>)
@@ -40,6 +46,7 @@ class Decks extends Component {
         return (
             <View>
                 <Text style={{color:'#000'}}>Deck List View here</Text>
+                {showDailyReminder && <Text style={{color:red}}>{getDailyReminderValue().today}</Text>}
                 <ScrollView
                     contentContainerStyle={{
                     flexGrow: 1,

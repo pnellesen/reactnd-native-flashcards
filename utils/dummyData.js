@@ -14,7 +14,8 @@ export default dummyData = {
           correct: null,
           showAnswer: false
         }
-      ]
+      ],
+      lastCompletedDate:'2018-09-22'
     },
     JavaScript: {
       title: 'JavaScript',
@@ -25,6 +26,7 @@ export default dummyData = {
           correct: null,
           showAnswer: false
         }
-      ]
+      ],
+      lastCompletedDate:null
     }
   }

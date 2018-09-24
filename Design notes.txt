@@ -134,6 +134,16 @@ Notifications notes:
 
     Need a daily notification to remind user to answer at least one quiz
 
+    Set a flag in AsyncStorage to determine if user has answered a quiz today:
+
+        lastQuizCompletedDate: null or yyyy-mm-dd
+
+        if lastQuizCompletedDate !== timeToString() - showAlert
+
+        if user completes a quiz, set lastQuizCompletedDate to timeToString()
+
+
+
     const questionsAnswered = getDecks(DECKS_STORAGE_KEY).Object(keys).map((deck) => {
         return deck[questions].filter((question) => {
             question.correct !== null

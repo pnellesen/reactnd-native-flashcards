@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Text, View, StyleSheet, TouchableOpacity } from 'react-native';
-import { getDeck } from '../utils/helpers'
+import { getDeck, setDeckCompletedDate } from '../utils/helpers'
 import { Constants, AppLoading } from 'expo'
 
 
@@ -49,17 +49,25 @@ class QuizView extends Component {
     }
 
     _answerQuestion = (isCorrect, idx) => {
-
+        const { key } = this.props.navigation.state.params
         const { deck } = this.state
         deck.questions[idx].correct = isCorrect;
+        const newNumberAnswered = deck.questions.filter((question) => {
+            return question.correct !== null
+        }).length;
+        const newNumberCorrect = deck.questions.filter((question) => {
+            return question.correct === true
+        }).length;
         this.setState({
             deck: deck,
-            numberCorrect: deck.questions.filter((question) => {
-                return question.correct === true
-            }).length,
-            numberAnswered: deck.questions.filter((question) => {
-                return question.correct !== null
-            }).length
+            numberCorrect: newNumberCorrect,
+            numberAnswered: newNumberAnswered
+        }, () => {
+            if (newNumberAnswered === deck.questions.length) {// Reset daily notification, and reload Decks to remove daily reminder notice
+                setDeckCompletedDate(key).then(() => {
+                    this.props.screenProps.setReloadDecks(true)
+                })
+            }
         })
 
     }
@@ -106,6 +114,7 @@ class QuizView extends Component {
                 </View>
             )
         } else {
+
             return (
                 <View>
                     <Text>All questions answered! Number correct/Total: { numberCorrect }/{ totalQuestions }</Text>

@@ -8,6 +8,9 @@ import NewDeckView from './components/NewDeckView'
 import QuizView from './components/QuizView'
 import NewCardView from './components/NewCardView'
 import { Constants } from 'expo'
+import { setLocalNotification, timeToString } from './utils/helpers'
+
+
 
 function DecksStatusBar({ backgroundColor, ...props}) {
   return (
@@ -93,9 +96,14 @@ const MainNavigator = createStackNavigator({
 })
 
 
+
 export default class App extends React.Component {
   state={
     reloadDecks: false
+  }
+
+  componentDidMount() {
+    setLocalNotification()
   }
 
   _setReloadDecks = (value) => {
