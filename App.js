@@ -9,6 +9,7 @@ import QuizView from './components/QuizView'
 import NewCardView from './components/NewCardView'
 import { Constants } from 'expo'
 import { setLocalNotification, timeToString } from './utils/helpers'
+import { Ionicons } from '@expo/vector-icons'
 
 
 
@@ -29,13 +30,15 @@ const Tabs = createBottomTabNavigator({
   Decks: {
     screen: Decks,
     navigationOptions:{
-      tabBarLabel: 'Deck List View'
+      tabBarLabel: 'Quiz List',
+      tabBarIcon: ({ tintColor }) => <Ionicons name='ios-list' size={23} color={tintColor}/>
     }
   },
   NewDeck: {
     screen: NewDeckView,
     navigationOptions: {
-      tabBarLabel: 'Add New Deck'
+      tabBarLabel: 'Add New Quiz',
+      tabBarIcon: ({ tintColor }) => <Ionicons name='logo-buffer' size={23} color={tintColor}/>
     }
   }
 }, {
@@ -44,11 +47,16 @@ const Tabs = createBottomTabNavigator({
   },
   tabBarOptions: {
     //activeTintColor: Platform.OS === 'ios' ? purple : white,
-    activeTintColor: "#000",
+    activeBackgroundColor: '#000',
+    activeTintColor: "#fff",
+    inactiveBackgroundColor: '#fff',
     inactiveTintColor: "#ccc",
     //showIcon: true,
+    labelStyle: {
+      fontSize:14
+    },
     style: {
-      height: 56,
+      height: 45,
       //backgroundColor: Platform.OS === 'ios' ? white : purple,
       backgroundColor: "#fff",
       shadowRadius: 6,
