@@ -3,6 +3,11 @@ import { View, Text, TextInput, KeyboardAvoidingView, TouchableOpacity, Platform
 import { getDecks, addDeck } from '../utils/helpers'
 
 class NewDeckView extends Component {
+
+    static navigationOptions = {
+        title: 'Add New Deck',
+      };
+
     state = {
         titleList: [],
         newDeckTitle: ''

@@ -3,6 +3,10 @@ import { View, Text, TextInput, KeyboardAvoidingView, TouchableOpacity, Platform
 import { getDeck, addCard } from '../utils/helpers'
 
 class NewCardView extends Component {
+    static navigationOptions = {
+        title: 'Add New Card',
+      };
+
     state = {
         deck: null,
         newCardQuestion: null,

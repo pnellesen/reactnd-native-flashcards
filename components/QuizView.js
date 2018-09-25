@@ -5,6 +5,9 @@ import { Constants, AppLoading } from 'expo'
 
 
 class QuizView extends Component {
+    static navigationOptions = {
+        title: 'Question/Answer Card',
+      };
 
     _getInitialState = () => {
         return {

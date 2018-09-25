@@ -43,7 +43,7 @@ const Tabs = createBottomTabNavigator({
   }
 }, {
   navigationOptions: {
-    header: null
+    header: null,
   },
   tabBarOptions: {
     //activeTintColor: Platform.OS === 'ios' ? purple : white,
@@ -73,6 +73,14 @@ const Tabs = createBottomTabNavigator({
 const MainNavigator = createStackNavigator({
   Home: {
     screen: Tabs,
+    navigationOptions: {
+      title: 'UdaciCards',
+      fontSize: 14,
+      headerTintColor: white,
+      headerStyle: {
+        backgroundColor: purple,
+      }
+    }
   },
   Deck: {
     screen: Deck,

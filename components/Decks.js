@@ -5,6 +5,7 @@ import { red } from '../utils/colors'
 import { Constants, AppLoading } from 'expo'
 
 class Decks extends Component {
+
     state = {
         deckList: {},
         isReady: false,

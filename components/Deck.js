@@ -4,6 +4,9 @@ import { getDecks } from '../utils/helpers';
 import { Constants, AppLoading } from 'expo'
 
 class Deck extends Component {
+    static navigationOptions = {
+        title: 'Quiz',
+      };
 
     state = {
         deck: null,
