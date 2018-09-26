@@ -8,10 +8,12 @@ const NOTIFICATION_KEY = 'reactnd_flashcards:notifications'
 const DECKS_STORAGE_KEY = "reactnd_flashcards:decks"
 
 /**
- * TODO: add a helper function to generate a UID. copy from one used previously
- * if you can find it.
+ * helper function to generate a UID. Direct copy from the
+ * one used in Project 2
  */
-
+function generateUID () {
+  return Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15)
+}
 
 /**
  * BEGIN Notifications here. Based on code used in UdaciFitness app from class
@@ -79,17 +81,16 @@ export function setLocalNotification() {
 // END Notifications
 
  export function addCard(deck) {
- return getDeck(deck.title)
+  return getDeck(deck.id)
     .then((result) => {
       const newDeck = {
-        [deck.title]: {
+        [deck.id]: {
           ...result,
           ...deck
         }
       }
       return AsyncStorage.mergeItem(DECKS_STORAGE_KEY,JSON.stringify(newDeck))
     })
-
 }
 
 export function getDecks() {
@@ -140,22 +141,25 @@ export function setDeckCompletedDate(key) {
 
 
 export function addDeck(title) {
+  const newKey = generateUID()
   const newDeck = {
-    [title]: {
+    [newKey]: {
+      id: newKey,
       title: title,
       questions: [],
       lastCompletedDate: null
     }
   }
-  //console.log("add new deck - newDeck? ", newDeck)
-
   return AsyncStorage.mergeItem(DECKS_STORAGE_KEY,JSON.stringify(newDeck))
+    .then(() => {
+      return newKey
+    })
 }
-
 
 _getDummyData = () => {
     const dummyData = {
-        React: {
+        '8xf0y6ziyjabvozdd253nd': {
+          id: '8xf0y6ziyjabvozdd253nd',
           title: 'React',
           questions: [
             {
@@ -173,7 +177,8 @@ _getDummyData = () => {
           ],
           lastCompletedDate:null
         },
-        JavaScript: {
+        '6ni6ok3ym7mf1p33lnez': {
+          id: '6ni6ok3ym7mf1p33lnez',
           title: 'JavaScript',
           questions: [
             {

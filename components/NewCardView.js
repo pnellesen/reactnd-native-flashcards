@@ -53,11 +53,8 @@ class NewCardView extends Component {
 
         addCard(newDeck).then(()=> {
             if (this.props.screenProps.reloadDecks === false) this.props.screenProps.setReloadDecks(true)
-            navigation.navigate('Deck', {key: deck.title})
+           navigation.navigate('Deck', {key: deck.id})
         })
-
-
-
     }
 
     render() {

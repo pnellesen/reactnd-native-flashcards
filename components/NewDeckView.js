@@ -31,12 +31,14 @@ class NewDeckView extends Component {
     _addNewDeck = () => {
         const { navigation } = this.props
         const newTitle = this.state.newDeckTitle
-        addDeck(newTitle)
         this.setState({
             newDeckTitle: ''
         })
-        if (this.props.screenProps.reloadDecks === false) this.props.screenProps.setReloadDecks(true)
-        navigation.navigate('Deck', {key: newTitle})
+        addDeck(newTitle).then((newKey) => {
+            if (this.props.screenProps.reloadDecks === false) this.props.screenProps.setReloadDecks(true)
+            navigation.navigate('Deck', {key: newKey})
+        })
+
     }
 
     render() {

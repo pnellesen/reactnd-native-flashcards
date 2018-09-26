@@ -23,7 +23,6 @@ class Deck extends Component {
     }
     _getDeck() {
         const { key } = this.props.navigation.state.params
-        const { deck } = this.state
         getDecks().then((results) => {
             const newDeck = results[key]
             this.setState({
@@ -32,7 +31,6 @@ class Deck extends Component {
             })
         })
     }
-
 
     render() {
         const { navigation } = this.props

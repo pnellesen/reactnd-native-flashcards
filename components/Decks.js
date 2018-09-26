@@ -45,24 +45,24 @@ class Decks extends Component {
          * use FlatList if it was anticipated that list would be long
          */
         return (
-            <View style={{flex:1, alignItems:'center'}}>
+            <View style={{alignItems:'center'}}>
                 <Text style={{color:'#000'}}>Deck List View here</Text>
                 {showDailyReminder && <Text style={{color:red}}>{getDailyReminderValue().today}</Text>}
                 <ScrollView
                     contentContainerStyle={{
                     flexGrow: 1,
                     justifyContent:'flex-start',
-                    width:250
+                    width:300
                 }}>
                 {
                     Object.keys(deckList).map((key) => {
                         return (
-                            <TouchableOpacity key={key} style={{flex:1,alignItems:'center',backgroundColor: '#ccc', margin:10, padding: 10,borderRadius: 5, borderWidth:1, borderColor:'#000'}}
+                            <TouchableOpacity key={key} style={{alignItems: 'center', backgroundColor: '#ccc', margin:10, padding: 10,borderRadius: 5, borderWidth:1, borderColor:'#000'}}
                                 onPress={() => navigation.navigate(
                                     'Deck',
                                     {key: key}
                                 )}>
-                                <Text>{deckList[key].title}</Text>
+                                <Text style={{fontSize:20}}>{deckList[key].title}</Text>
                                 <Text>{deckList[key].questions.length} cards</Text>
                             </TouchableOpacity>
 
