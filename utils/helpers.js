@@ -27,7 +27,7 @@ export function timeToString (time = Date.now()) {
 
 export function getDailyReminderValue() {
   return {
-    today: "👋 Don't forget to study your FlashCards today!"
+    today: "👋 Don't forget to take a quiz today!"
   }
 }
 
