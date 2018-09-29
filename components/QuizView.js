@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Text, View, StyleSheet, TouchableOpacity } from 'react-native';
 import { getDeck, setDeckCompletedDate } from '../utils/helpers'
 import { Constants, AppLoading } from 'expo'
+import { white, blue, red, green } from '../utils/colors'
 
 
 class QuizView extends Component {
@@ -88,32 +89,36 @@ class QuizView extends Component {
 
         if (numberAnswered < deck.questions.length) {
             const { showAnswer, question, answer } = deck.questions[numberAnswered]
-
+            const numberLeft = totalQuestions - numberAnswered - 1
             return(
-                <View>
-                    <Text>{numberAnswered + 1}/{totalQuestions}</Text>
-                    <Text>Quiz View for {deck.title} Here</Text>
-                    <Text style={{margin: 10, fontSize:30}}>{question}</Text>
+                <View style={{alignItems:'center', marginTop:20}}>
 
-                    { showAnswer && <Text style={{margin: 10, fontSize:16}}>{answer}</Text> }
+                    <Text style={{fontSize:30}}>{deck.title}</Text>
 
-                     <TouchableOpacity
-                        style={{ backgroundColor: '#fff', margin:10, padding: 10,borderRadius: 5, borderWidth:1, borderColor:'#000' }}
-                        onPress={ () => this._toggleShowAnswer(numberAnswered) }>
-                        <Text>{showAnswer ? `Hide` : `Show`} Answer</Text>
-                    </TouchableOpacity>
+                    <View style={styles.container}>
+                        <Text>Question {numberAnswered + 1} ({numberLeft} remaining)</Text>
+                        <Text style={{margin: 10, fontSize:24}}>{question}</Text>
 
-                    <TouchableOpacity
-                        style={{ backgroundColor: '#fff', margin:10, padding: 10,borderRadius: 5, borderWidth:1, borderColor:'#000' }}
-                        onPress={ () => this._answerQuestion(true, numberAnswered) }>
-                        <Text>Correct</Text>
-                    </TouchableOpacity>
+                        { showAnswer && <Text style={{margin: 10, fontSize:16}}>{answer}</Text> }
 
-                    <TouchableOpacity
-                        style={{ backgroundColor: '#fff', margin:10, padding: 10,borderRadius: 5, borderWidth:1, borderColor:'#000' }}
-                        onPress={ () => this._answerQuestion(false, numberAnswered) }>
-                        <Text>Incorrect</Text>
-                    </TouchableOpacity>
+                        <TouchableOpacity
+                            style={[styles.buttonCommon, { padding:0, backgroundColor: '#ccc', borderColor:'#ccc'}]}
+                            onPress={ () => this._toggleShowAnswer(numberAnswered) }>
+                            <Text style={{color:blue}}>{showAnswer ? `Hide` : `Show`} Answer</Text>
+                        </TouchableOpacity>
+
+                        <TouchableOpacity
+                            style={[{ backgroundColor: green}, styles.buttonCommon]}
+                            onPress={ () => this._answerQuestion(true, numberAnswered) }>
+                            <Text style={{color: white}}>Correct</Text>
+                        </TouchableOpacity>
+
+                        <TouchableOpacity
+                            style={[{ backgroundColor: red}, styles.buttonCommon]}
+                            onPress={ () => this._answerQuestion(false, numberAnswered) }>
+                            <Text style={{color: white}}>Incorrect</Text>
+                        </TouchableOpacity>
+                    </View>
                 </View>
             )
         } else {
@@ -141,3 +146,26 @@ class QuizView extends Component {
 }
 
 export default QuizView
+
+const styles = StyleSheet.create({
+    container: {
+        alignItems: 'center',
+        backgroundColor: '#ccc',
+        marginTop: 20,
+        margin:10,
+        padding: 10,
+        borderRadius: 5,
+        borderWidth:1,
+        borderColor:'#000',
+        width:350
+    },
+    buttonCommon: {
+        margin:10,
+        padding: 10,
+        borderRadius: 5,
+        //borderWidth:1,
+        //borderColor:'#000',
+        width:200,
+        alignItems:'center'
+    }
+  });

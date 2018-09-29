@@ -65,7 +65,7 @@ class Deck extends Component {
 export default Deck
 
 const styles = StyleSheet.create({
-    container: {alignItems: 'center', backgroundColor: '#ccc', margin:10, marginTop:50, padding: 10,borderRadius: 5, borderWidth:1, borderColor:'#000'},
+    container: {alignItems: 'center', backgroundColor: '#ccc', margin:10, marginTop:40, padding: 10,borderRadius: 5, borderWidth:1, borderColor:'#000'},
 
     deckButton: {alignItems:'center', width:250,margin:10, padding: 10,borderRadius: 5, borderWidth:1, borderColor:'#000'}
   });
