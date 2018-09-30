@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { View, Text, TextInput, KeyboardAvoidingView, TouchableOpacity, Platform, StyleSheet } from 'react-native'
 import { getDeck, addCard } from '../utils/helpers'
-import { blue, gray } from '../utils/colors'
+import { black, white, blue, gray, lightGray } from '../utils/colors'
 
 class NewCardView extends Component {
     static navigationOptions = {
@@ -91,7 +91,7 @@ class NewCardView extends Component {
                         value={newCardQuestion}
                         onChangeText={this.handleNewQuestionChange}
                         placeholder={'New Question'}
-                        placeholderTextColor={'#ccc'}
+                        placeholderTextColor={lightGray}
                         returnKeyType='done'
                         style={styles.inputStyle}
                         />
@@ -102,17 +102,17 @@ class NewCardView extends Component {
                         value={newCardAnswer}
                         onChangeText={this.handleNewAnswerChange}
                         placeholder={'New Answer'}
-                        placeholderTextColor={'#ccc'}
+                        placeholderTextColor={lightGray}
                         returnKeyType='done'
                         multiline={true}
                         style={styles.inputStyle}
                         />
                 </View>
                 <TouchableOpacity
-                    style={{backgroundColor: this.state.submitDisabled ? gray : blue, margin:10, padding: 10,borderRadius: 5, borderWidth:1, borderColor:'#000', width:150, alignItems:'center'}}
+                    style={[{ backgroundColor: this.state.submitDisabled ? gray : blue}, styles.buttonCommon]}
                     onPress={this._addNewCard}
                     disabled={this.state.submitDisabled}>
-                        <Text style={{color: '#fff'}}>Submit</Text>
+                        <Text style={{color: lightGray}}>Submit</Text>
                 </TouchableOpacity>
             </KeyboardAvoidingView>
         )
@@ -122,6 +122,13 @@ class NewCardView extends Component {
 export default NewCardView
 
 const styles = StyleSheet.create({
-    container: {alignItems: 'center', backgroundColor: '#ccc', margin:10, marginTop:40, padding: 10,borderRadius: 5, borderWidth:1, borderColor:'#000'},
-    inputStyle: {borderWidth: 1,fontSize:18,borderRadius:5,backgroundColor:'#fff', width:300,padding:5,marginTop:5}
+    container: {alignItems: 'center', backgroundColor: lightGray, margin:10, marginTop:40, padding: 10,borderRadius: 5, borderWidth:1, borderColor:black},
+    inputStyle: {borderWidth: 1,fontSize:18,borderRadius:5,backgroundColor:white, width:300,padding:5,marginTop:5},
+    buttonCommon: {
+        margin:10,
+        padding: 10,
+        borderRadius: 5,
+        width:200,
+        alignItems:'center'
+    }
   });

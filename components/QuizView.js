@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import { Text, View, StyleSheet, TouchableOpacity } from 'react-native';
 import { getDeck, setDeckCompletedDate } from '../utils/helpers'
-import { Constants, AppLoading } from 'expo'
-import { white, blue, red, green } from '../utils/colors'
+import { AppLoading } from 'expo'
+import { white, blue, red, green, lightGray, black } from '../utils/colors'
 
 
 class QuizView extends Component {
@@ -87,22 +87,25 @@ class QuizView extends Component {
 
         // TODO: error handling if we don't get a valid dec
 
+
+
+
         if (numberAnswered < deck.questions.length) {
             const { showAnswer, question, answer } = deck.questions[numberAnswered]
             const numberLeft = totalQuestions - numberAnswered - 1
             return(
-                <View style={{alignItems:'center', marginTop:20}}>
+                <View style={styles.mainWrapper}>
 
                     <Text style={{fontSize:30}}>{deck.title}</Text>
 
                     <View style={styles.container}>
-                        <Text>Question {numberAnswered + 1} ({numberLeft} remaining)</Text>
+                        <Text style={{margin: 10, fontSize:16}}>Question {numberAnswered + 1} ({numberLeft} remaining)</Text>
                         <Text style={{margin: 10, fontSize:24}}>{question}</Text>
 
                         { showAnswer && <Text style={{margin: 10, fontSize:16}}>{answer}</Text> }
 
                         <TouchableOpacity
-                            style={[styles.buttonCommon, { padding:0, backgroundColor: '#ccc', borderColor:'#ccc'}]}
+                            style={[styles.buttonCommon, { padding:0, backgroundColor: lightGray, borderColor:lightGray}]}
                             onPress={ () => this._toggleShowAnswer(numberAnswered) }>
                             <Text style={{color:blue}}>{showAnswer ? `Hide` : `Show`} Answer</Text>
                         </TouchableOpacity>
@@ -124,20 +127,25 @@ class QuizView extends Component {
         } else {
 
             return (
-                <View>
-                    <Text>All questions answered! Number correct/Total: { numberCorrect }/{ totalQuestions }</Text>
+                <View style={styles.mainWrapper}>
 
-                    <TouchableOpacity
-                        style={{ backgroundColor: '#fff', margin:10, padding: 10,borderRadius: 5, borderWidth:1, borderColor:'#000' }}
-                        onPress={ () => this._setStateFromDeck() }>
-                        <Text>Restart Quiz</Text>
-                    </TouchableOpacity>
+                    <Text style={{fontSize:30}}>{deck.title}</Text>
 
-                    <TouchableOpacity
-                        style={{ backgroundColor: '#000', margin:10, padding: 10,borderRadius: 5, borderWidth:1, borderColor:'#000' }}
-                        onPress={ () => navigation.navigate('Deck',{ key: key }) }>
-                        <Text style={{ color: '#fff' }}>Back to Deck</Text>
-                    </TouchableOpacity>
+                    <View style={styles.container}>
+                        <Text style={{fontSize:24}}>Quiz complete!</Text>
+                        <Text style={{marginTop: 10, marginBottom: 10, fontSize:16}}>Your score:  { numberCorrect } correct out of { totalQuestions } total</Text>
+                        <TouchableOpacity
+                            style={[{ backgroundColor: white }, styles.buttonCommon]}
+                            onPress={ () => this._setStateFromDeck() }>
+                            <Text>Restart Quiz</Text>
+                        </TouchableOpacity>
+
+                        <TouchableOpacity
+                            style={[{ backgroundColor: blue }, styles.buttonCommon]}
+                            onPress={ () => navigation.navigate('Deck',{ key: key }) }>
+                            <Text style={{ color: white }}>Back to Deck</Text>
+                        </TouchableOpacity>
+                    </View>
                 </View>
             )
         }
@@ -148,23 +156,25 @@ class QuizView extends Component {
 export default QuizView
 
 const styles = StyleSheet.create({
+    mainWrapper: {
+        alignItems:'center',
+        marginTop:20
+    },
     container: {
         alignItems: 'center',
-        backgroundColor: '#ccc',
+        backgroundColor: lightGray,
         marginTop: 20,
         margin:10,
         padding: 10,
         borderRadius: 5,
         borderWidth:1,
-        borderColor:'#000',
+        borderColor:black,
         width:350
     },
     buttonCommon: {
         margin:10,
         padding: 10,
         borderRadius: 5,
-        //borderWidth:1,
-        //borderColor:'#000',
         width:200,
         alignItems:'center'
     }

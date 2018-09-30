@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import { Text, View, StyleSheet, TouchableOpacity } from 'react-native';
 import { getDecks } from '../utils/helpers';
-import { Constants, AppLoading } from 'expo'
+import { blue, white, lightGray, black, gray } from '../utils/colors'
+import { AppLoading } from 'expo'
 
 class Deck extends Component {
     static navigationOptions = {
@@ -10,24 +11,25 @@ class Deck extends Component {
 
     state = {
         deck: null,
-        isReady: false
+        isReady: false,
+        submitDisabled: true
     }
     componentDidMount() {
        this._getDeck()
     }
 
-    componentDidUpdate(prevProps, prevState) {
-        if (this.props.screenProps.reloadDecks) {
-            this._getDeck()
-        }
+    componentWillReceiveProps(nextProps) {
+        nextProps.screenProps.reloadDecks && this._getDeck()
     }
+
     _getDeck() {
         const { key } = this.props.navigation.state.params
         getDecks().then((results) => {
             const newDeck = results[key]
             this.setState({
                 deck: newDeck,
-                isReady: true
+                isReady: true,
+                submitDisabled: newDeck.questions.length > 0 ? false : true
             })
         })
     }
@@ -35,26 +37,28 @@ class Deck extends Component {
     render() {
         const { navigation } = this.props
         const { key } = navigation.state.params
-        const { deck, isReady } = this.state
-        // TODO: error handling if we don't get a valid dec
+        const { deck, isReady, submitDisabled } = this.state
+
         if (isReady === false) return (<AppLoading/>)
 
         return(
             <View  style={styles.container}>
                 <Text style={{fontSize:30}}>{deck.title}</Text>
-                <Text>{deck.questions.length} card{deck.questions.length !== 1 && 's'}</Text>
+                <Text style={{fontSize: 18, marginTop:10, marginBottom: 10}}>{deck.questions.length} card{deck.questions.length !== 1 && 's'}</Text>
 
-                <TouchableOpacity style={[{backgroundColor: '#fff'}, styles.deckButton]}
+                <TouchableOpacity style={[{backgroundColor: white}, styles.buttonCommon]}
                     onPress={() => navigation.navigate(
                         'AddQuestion',
                         {key: key}
                     )}><Text>Add Card</Text></TouchableOpacity>
 
-                <TouchableOpacity style={[{backgroundColor: '#000'}, styles.deckButton]}
+                <TouchableOpacity
+                    style={[{ backgroundColor: this.state.submitDisabled ? gray : blue}, styles.buttonCommon]}
+                    disabled={ submitDisabled }
                     onPress={() => navigation.navigate(
                         'QuizView',
                         { key: key}
-                    )}><Text style={{color: '#fff'}}>Start Quiz</Text></TouchableOpacity>
+                    )}><Text style={{color: this.state.submitDisabled ? lightGray : white}}>Start Quiz</Text></TouchableOpacity>
 
             </View>
         )
@@ -65,7 +69,21 @@ class Deck extends Component {
 export default Deck
 
 const styles = StyleSheet.create({
-    container: {alignItems: 'center', backgroundColor: '#ccc', margin:10, marginTop:40, padding: 10,borderRadius: 5, borderWidth:1, borderColor:'#000'},
-
-    deckButton: {alignItems:'center', width:250,margin:10, padding: 10,borderRadius: 5, borderWidth:1, borderColor:'#000'}
+    container: {
+        alignItems: 'center',
+        backgroundColor: lightGray,
+        margin:10,
+        marginTop:40,
+        padding: 10,
+        borderRadius: 5,
+        borderWidth:1,
+        borderColor:black
+    },
+    buttonCommon: {
+        margin:10,
+        padding: 10,
+        borderRadius: 5,
+        width:200,
+        alignItems:'center'
+    }
   });

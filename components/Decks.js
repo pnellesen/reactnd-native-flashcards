@@ -1,8 +1,8 @@
 import React, { Component } from 'react'
 import { View, Text, TouchableOpacity, Platform, StyleSheet, ScrollView, Animated, Easing } from 'react-native'
 import { getDecks, timeToString, getDailyReminderValue  } from '../utils/helpers'
-import { red } from '../utils/colors'
-import { Constants, AppLoading } from 'expo'
+import { red, lightGray, black } from '../utils/colors'
+import { AppLoading } from 'expo'
 
 class Decks extends Component {
 
@@ -111,12 +111,12 @@ const styles = StyleSheet.create({
     decks: {
         alignItems: 'center',
         justifyContent:'space-around',
-        backgroundColor: '#ccc',
+        backgroundColor: lightGray,
         margin:10,
         padding: 10,
         borderRadius: 5,
         borderWidth:1,
-        borderColor:'#000',
+        borderColor:black,
         height:90
     },
 

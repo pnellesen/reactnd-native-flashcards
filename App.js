@@ -1,17 +1,15 @@
 import React from 'react';
-import { StyleSheet, Text, View, StatusBar } from 'react-native';
+import { StyleSheet, View, StatusBar } from 'react-native';
 import { createBottomTabNavigator, createStackNavigator } from 'react-navigation'
 import Decks from './components/Decks'
 import Deck from './components/Deck'
-import { white, purple }from './utils/colors'
+import { black, white, purple, lightGray, lightPurp }from './utils/colors'
 import NewDeckView from './components/NewDeckView'
 import QuizView from './components/QuizView'
 import NewCardView from './components/NewCardView'
 import { Constants } from 'expo'
-import { setLocalNotification, timeToString } from './utils/helpers'
+import { setLocalNotification } from './utils/helpers'
 import { Ionicons } from '@expo/vector-icons'
-
-
 
 function DecksStatusBar({ backgroundColor, ...props}) {
   return (
@@ -20,11 +18,6 @@ function DecksStatusBar({ backgroundColor, ...props}) {
     </View>
   )
 }
-
-/**
- * TODO: create a StackNavigator to go through the questions in a Deck,
- * use the navigate in Decks.js to go to the deck the user selects.
- */
 
 const Tabs = createBottomTabNavigator({
   Decks: {
@@ -47,18 +40,17 @@ const Tabs = createBottomTabNavigator({
   },
   tabBarOptions: {
     //activeTintColor: Platform.OS === 'ios' ? purple : white,
-    activeBackgroundColor: '#000',
-    activeTintColor: "#fff",
-    inactiveBackgroundColor: '#fff',
-    inactiveTintColor: "#ccc",
-    //showIcon: true,
+    activeBackgroundColor: purple,
+    activeTintColor: white,
+    inactiveBackgroundColor: white,
+    inactiveTintColor: lightGray,
     labelStyle: {
       fontSize:14
     },
     style: {
       height: 45,
       //backgroundColor: Platform.OS === 'ios' ? white : purple,
-      backgroundColor: "#fff",
+      backgroundColor: white,
       shadowRadius: 6,
       shadowOpacity: 1,
       shadowColor: 'rgba(0,0,0,0.24)',
@@ -130,7 +122,7 @@ export default class App extends React.Component {
 
     return (
       <View style={styles.container}>
-        <DecksStatusBar backgroundColor={'#ccc'}/>
+        <DecksStatusBar backgroundColor={lightGray}/>
         <MainNavigator screenProps={{setReloadDecks: this._setReloadDecks, reloadDecks: this.state.reloadDecks}}/>
       </View>
 
@@ -141,8 +133,7 @@ export default class App extends React.Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
-    //alignItems: 'center',
+    backgroundColor: white,
     justifyContent: 'center',
   },
 });

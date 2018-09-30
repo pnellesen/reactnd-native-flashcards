@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { View, Text, TextInput, KeyboardAvoidingView, TouchableOpacity, Platform, StyleSheet } from 'react-native'
 import { getDecks, addDeck } from '../utils/helpers'
+import { blue, lightGray, gray, black, white } from '../utils/colors';
 
 class NewDeckView extends Component {
 
@@ -10,7 +11,8 @@ class NewDeckView extends Component {
 
     state = {
         titleList: [],
-        newDeckTitle: ''
+        newDeckTitle: '',
+        submitDisabled: true
 
     }
     componentDidMount() {
@@ -24,7 +26,8 @@ class NewDeckView extends Component {
 
     handleTextChange = (newTitle) => {
         this.setState({
-            newDeckTitle: newTitle
+            newDeckTitle: newTitle,
+            submitDisabled: newTitle.length > 0 ? false : true
         })
     }
 
@@ -32,7 +35,8 @@ class NewDeckView extends Component {
         const { navigation } = this.props
         const newTitle = this.state.newDeckTitle
         this.setState({
-            newDeckTitle: ''
+            newDeckTitle: '',
+            submitDisabled: true
         })
         addDeck(newTitle).then((newKey) => {
             if (this.props.screenProps.reloadDecks === false) this.props.screenProps.setReloadDecks(true)
@@ -44,20 +48,58 @@ class NewDeckView extends Component {
     render() {
         const {newDeckTitle} = this.state
         return (
-            <KeyboardAvoidingView behavior='padding'>
-                <Text>New Deck View here</Text>
-                <Text>Add the title of your new Deck below:</Text>
+            <KeyboardAvoidingView behavior='padding' style={styles.container}>
+                <Text style={{fontSize:24, marginBottom:10}}>New Quiz</Text>
+                <View style={{margin:10}}>
+                <Text>Enter the title for your new Quiz below:</Text>
                 <TextInput
                     value={newDeckTitle}
                     onChangeText={this.handleTextChange}
                     placeholder={'New Title'}
-                    style={{borderWidth: 1,margin:10,fontSize:30,borderRadius:5}}
+                    placeholderTextColor={lightGray}
+                    returnKeyType='done'
+                    style={styles.inputStyle}
                     />
-                <TouchableOpacity style={{backgroundColor: '#000', margin:10, padding: 10,borderRadius: 5, borderWidth:1, borderColor:'#000'}}
-                                onPress={this._addNewDeck}><Text style={{color: '#fff'}}>Submit</Text></TouchableOpacity>
+                </View>
+                <TouchableOpacity
+                    style={[{ backgroundColor: this.state.submitDisabled ? gray : blue}, styles.buttonCommon]}
+                    onPress={this._addNewDeck}
+                    disabled={this.state.submitDisabled}>
+                        <Text style={{color: this.state.submitDisabled ? lightGray : white}}>Submit</Text>
+                </TouchableOpacity>
             </KeyboardAvoidingView>
         )
     }
 }
 
 export default NewDeckView
+
+const styles = StyleSheet.create({
+    container: {
+        alignItems: 'center',
+        backgroundColor: lightGray,
+        margin:10,
+        marginTop:40,
+        padding: 20,
+        borderRadius: 5,
+        borderWidth:1,
+        borderColor:black
+    },
+    inputStyle: {
+        borderWidth: 1,
+        fontSize:18,
+        borderRadius:5,
+        backgroundColor: white,
+        width:300,
+        padding:5,
+        marginTop:5,
+        marginBottom:10
+    },
+    buttonCommon: {
+        marginBottom:20,
+        padding: 10,
+        borderRadius: 5,
+        width:200,
+        alignItems:'center'
+    }
+  });
