@@ -1,4 +1,4 @@
-# UdaciFitness Project
+# UdaciCards Project (ReactJS Nanodegree Project 3)
 
 Description:
   This is a React-Native "Flashcard" app. A list of user-defined flashcard decks is displayed, and the user can quiz themselves and create new quizzes as desired. It utilizes AsyncStorage for persistance.
