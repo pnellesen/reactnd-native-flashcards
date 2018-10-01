@@ -18,6 +18,7 @@ Basic operations:
   View Quiz (or Card) - when a quiz is pressed, the quiz selected will display an "expand" animation, then the user will be taken to a screen displaying the Quiz name, the number of questions in the Quiz, and the option to either add a new question to the quiz, or to start the Quiz. Note that if the quiz currently has no questions in it, the "Start Quiz" button will be disabled.
 
   Question/Answer View - this view displays the following information:
+  
     1. Quiz/Deck Title
     2. Which question the user is on, and the number of questions remaining in the quiz
     3. The question
@@ -26,11 +27,13 @@ Basic operations:
     6. When either "Correct" or "Incorrect" button is selected, the user will either be taken to the next question, or will be shown the "Quiz Finished" view if all questions have been answered.
 
   Quiz Finished View - diplays the following information:
+  
     1. Quiz/Deck Title
     2. Text informing the user they have completed the quiz, and showing the number they answered correctly out of the total number in the quiz.
     3. "Restart Quiz" and "Return to Deck" buttons which will allow the user to restart the quiz, or return to the View Quiz screen, respectively.
 
   Add new Question/Answer card - displays the following.
+  
     1. Quiz/Deck Title
     2. Text field for the new question
     3. Text field for the new answer
