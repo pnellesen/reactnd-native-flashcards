@@ -3,7 +3,7 @@ import { StyleSheet, View, StatusBar } from 'react-native';
 import { createBottomTabNavigator, createStackNavigator } from 'react-navigation'
 import Decks from './components/Decks'
 import Deck from './components/Deck'
-import { black, white, purple, lightGray, lightPurp }from './utils/colors'
+import {  white, purple, lightGray }from './utils/colors'
 import NewDeckView from './components/NewDeckView'
 import QuizView from './components/QuizView'
 import NewCardView from './components/NewCardView'
@@ -103,17 +103,19 @@ const MainNavigator = createStackNavigator({
   }
 })
 
-
-
 export default class App extends React.Component {
   state={
-    reloadDecks: false
+    reloadDecks: false //This value will be passed in screenProps to inform components that a change has been made to a deck, and that the decks need to be refreshed
   }
 
   componentDidMount() {
     setLocalNotification()
   }
 
+  /**
+   *  This function will be passed to the components via screenProps,
+   *  and will be called whenever a change has been made to data in AsyncStorage
+   **/
   _setReloadDecks = (value) => {
     this.setState({reloadDecks: value})
   }

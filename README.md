@@ -1,3 +1,81 @@
+# UdaciFitness Project
+
+Description:
+  This is a React-Native "Flashcard" app. A list of user-defined flashcard decks is displayed, and the user can quiz themselves and create new quizzes as desired. It utilizes AsyncStorage for persistance.
+
+Environment: This app was tested (and runs) on iOS 12 devices.
+
+Installation/Launching:
+
+  To install, you should have a node.js server available on your system. Clone or download the app at https://github.com/pnellesen/reactnd-udacifitness to a directory of your choosing (unzip if downloading) then run "npm install" or "yarn install" in the app directory. Once all the required node modules have been installed, run "npm start" or "yarn start" to run the application. Note that you will need the "Expo" app running on the device you intend to use.
+
+  (There was a note during the class that there could be issues uing NPM instead of yarn for react-native, but I didn't notice anything unusual when testing it. I did, however, use "yarn" during most of my development)
+
+Basic operations:
+
+  Startup: Upon loading, the user will see a list of Flashcard "Decks", showing the name of the Deck and the number of questions (or "Cards") in the deck. At the bottom of screen there are 2 tabs - "Quiz List" and "New Quiz". The currently selected tab will be colored purple.
+
+  View Quiz (or Card) - when a quiz is pressed, the quiz selected will display an "expand" animation, then the user will be taken to a screen displaying the Quiz name, the number of questions in the Quiz, and the option to either add a new question to the quiz, or to start the Quiz. Note that if the quiz currently has no questions in it, the "Start Quiz" button will be disabled.
+
+  Question/Answer View - this view displays the following information:
+    1. Quiz/Deck Title
+    2. Which question the user is on, and the number of questions remaining in the quiz
+    3. The question
+    4. A "Show answer" button which will display the answer when pressed (along with changing to "Hide Answer" to hide the answer if desired)
+    5. "Correct" and "Incorrect" buttons which will be tracked to display the score when the quiz is finished
+    6. When either "Correct" or "Incorrect" button is selected, the user will either be taken to the next question, or will be shown the "Quiz Finished" view if all questions have been answered.
+
+  Quiz Finished View - diplays the following information:
+    1. Quiz/Deck Title
+    2. Text informing the user they have completed the quiz, and showing the number they answered correctly out of the total number in the quiz.
+    3. "Restart Quiz" and "Return to Deck" buttons which will allow the user to restart the quiz, or return to the View Quiz screen, respectively.
+
+  Add new Question/Answer card - displays the following.
+    1. Quiz/Deck Title
+    2. Text field for the new question
+    3. Text field for the new answer
+    4. Submit button - disabled until both question and answer have text in them. When pressed, will append a the new question/answer card to current Quiz and will return the user to the View Quiz screen.
+
+
+  New Quiz View
+    This screen allows the user to add a new quiz to the deck. It consists of a text field to enter the name of the quiz, and a submit button which will append a new quiz to the deck. When pressed, the user will be taken to the View Quiz screen for the new deck, where they can proceed to add new answer/question cards for that quiz.
+
+Notifications:
+
+  A notification is set for 8:00am to remind the user (if notification permission has been granted to the Expo app) to finish at least one quiz that day. A reminder is also displayed on the "Deck List View" screen until the user completes one quiz, at which point it will be reset to be displayed the next day.
+
+-------------------------------------------------------------------------------------------------------------------
+
+Additional technical notes
+
+  Redux was not used in this project. There is one "app-wide" parameter and function utilized by all components, which is easily handled via ScreenProps in the MainNavigation (StackNavigator) Component
+
+  Data is persisted in device AsyncStorage using a simple object of the following form:
+
+    data = {
+        'quiz key': {// unique random character/number string
+          id: 'same as quiz key',
+          title: 'Title text',
+          questions: [// array of objects of the following from
+            {
+              question: 'question text?',
+              answer: 'answer text',
+              correct: null,
+              showAnswer: false
+            },
+          ],
+          lastCompletedDate:null// flag used to determine if any quizzes have been completed for the current day
+        },
+        ...
+      }
+
+Acknowledgements:
+
+  Idea for the "Expanding button" animation used when user selects a deck is based on discussion found at https://code.tutsplus.com/tutorials/practical-animations-in-react-native--cms-27567
+
+
+=========================================================================
+
 This project was bootstrapped with [Create React Native App](https://github.com/react-community/create-react-native-app).
 
 Below you'll find information about performing common tasks. The most recent version of this guide is available [here](https://github.com/react-community/create-react-native-app/blob/master/react-native-scripts/template/README.md).
