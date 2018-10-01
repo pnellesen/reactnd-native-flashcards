@@ -7,7 +7,7 @@ Environment: This app was tested (and runs) on iOS 12 devices.
 
 Installation/Launching:
 
-  To install, you should have a node.js server available on your system. Clone or download the app at https://github.com/pnellesen/reactnd-udacifitness to a directory of your choosing (unzip if downloading) then run "npm install" or "yarn install" in the app directory. Once all the required node modules have been installed, run "npm start" or "yarn start" to run the application. Note that you will need the "Expo" app running on the device you intend to use.
+  To install, you should have a node.js server available on your system. Clone or download the app at https://github.com/pnellesen/reactnd-native-flashcards to a directory of your choosing (unzip if downloading) then run "npm install" or "yarn install" in the app directory. Once all the required node modules have been installed, run "npm start" or "yarn start" to run the application. Note that you will need the "Expo" app running on the device you intend to use.
 
   (There was a note during the class that there could be issues uing NPM instead of yarn for react-native, but I didn't notice anything unusual when testing it. I did, however, use "yarn" during most of my development)
 
